@@ -1,0 +1,17 @@
+Fuer Polarplot in terminal:
+cd Dowloads/Pl/hertz_dipol/
+
+Du musst die Daten von Openbis in data.csv eintragen wichtig die werte mit komama trennen und dezimal stellen mit punkt du darfst nicht die erste zeile loeschen wo U un theta steht
+
+Ausfuehrung:
+python3 hertz_dipol.py
+
+
+3D plot
+ausgehend von wo du dich grae befindest (siehe oben):
+cd 3D_plot/
+python3 3D_plots_and_subplots.py
+
+kannst dann davon screenshot machen (sollte sowas wie ein snipping toolgeben damit kannst du dann ein ausschnitt deines bildschirmes abfotografieren, eifach googeln snipping tool mac)
+
+

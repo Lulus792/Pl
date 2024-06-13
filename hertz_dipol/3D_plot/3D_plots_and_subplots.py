@@ -38,5 +38,5 @@ ax.set_zlabel('Spannung U')
 # plot a 3D wireframe like in the example mplot3d/wire3d_demo
 #X, Y, Z = get_test_data(0.05)
 #ax.plot_wireframe(X, Y, Z, rstride=10, cstride=10)
-plt.savefig('3D.jpg')
+#plt.savefig('3D.jpg')
 plt.show()
