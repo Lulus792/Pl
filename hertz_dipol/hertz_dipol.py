@@ -4,7 +4,7 @@ import pandas as pd
 from scipy.optimize import curve_fit
 
 def Voltage(x, r, j):
-    return r*(abs(np.sin(x*j)**2))
+    return r*(np.sin(x*j)**2)
 
 def get_r_ticks(u):
     return np.linspace(min(u), max(u), num=5) 
@@ -21,7 +21,7 @@ _U = Voltage(_Theta, r, j)
 
 fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})#, figsize=(10,10))
 ax.errorbar(theta, m_U, yerr=0.1, xerr=0.05, color='gray', fmt='.', label='Messwerte')
-ax.plot(_Theta, _U, label=r'$U=r\cdot\sin^2\left(\theta\cdot j\right)$''\n''$r='f'{round(r, 3)}'r'$, $j='f'{round(j, 3)}'r'$', color='orange')
+ax.plot(_Theta, _U, label=r'$U=a\cdot\sin^2\left(\theta\cdot b\right)$''\n'r'$a='f'{round(r, 3)}'r'$, $b='f'{round(j, 3)}'r'$', color='orange')
 
 ax.set_rmax((max(m_U)*1.1))
 ax.set_rticks(get_r_ticks(m_U))
