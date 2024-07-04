@@ -2,28 +2,36 @@
 #include <Adafruit_MotorShield.h>
 #include "utility/Adafruit_MS_PWMServoDriver.h"
 
-#define INIT            12
+/*
+  You can use any switch you just have to connect them right with the red Pitaya
+  STEP_DONE gives a signal to the Red pitaya that he can now measure values
+  DO_STEP to check if a step should be done
+  ENDSWITCH_END, ENDSWITCH_START are just to check if it got to any of the buttons
+  in the monochromator
+  INIT to Initialise the position -> motor moves to start
+*/
+#define STEP_DONE       7
+#define DO_STEP         9
 #define ENDSWITCH_START 10
 #define ENDSWITCH_END   11
-#define DO_STEP         9
-#define STEP_DONE       8
+#define INIT            12
 
+// used so that the motor is only doing one step
 bool can_do_step = true;
+bool finished = false;
 
+// Initialising the motor
 Adafruit_MotorShield AFMS = Adafruit_MotorShield();
-Adafruit_StepperMotor *_Motor = AFMS.getStepper(200 ,2); // 200 Steps pro umdrehung in port 2
+Adafruit_StepperMotor *_Motor = AFMS.getStepper(200 ,2);
 
-/*
-* Bei BACKWARD bewegt sich der Motor zum Start Switch
-* Bei FORWARD dem End Switch
-*/
-
+// gets executet only ones on startup
 void setup() {
+
   // Serial port einrchten
   Serial.begin(9600);
   AFMS.begin();
 
-  // Input Pins
+  // Initialises the Pins 
   pinMode(INIT, INPUT);
   pinMode(ENDSWITCH_START, INPUT);
   pinMode(ENDSWITCH_END, INPUT);
@@ -36,15 +44,17 @@ void setup() {
 }
 
 void loop() {
+  // reads from red pitaya if it should make a step
   int do_step_val = digitalRead(DO_STEP);
 
-  if (digitalRead(INIT) == HIGH) {
+  // only runs if the motor should get to startung position 
+  if (finished) { // stop running }
+  else if (digitalRead(INIT) == HIGH) {
     digitalWrite(STEP_DONE, LOW);
     if (digitalRead(ENDSWITCH_START) != HIGH) {
       _Motor->onestep(BACKWARD, DOUBLE);
     }
     else {
-      Serial.print("Initialiserung Fertig\n");
       digitalWrite(STEP_DONE, HIGH);
       _Motor->release();
     }
@@ -53,6 +63,9 @@ void loop() {
     digitalWrite(STEP_DONE, LOW);
     if (digitalRead(ENDSWITCH_END) != HIGH) {
       _Motor->onestep(FORWARD, DOUBLE);
+    }
+    else {
+      finished = true;
     }
     digitalWrite(STEP_DONE, HIGH);
     can_do_step = false;

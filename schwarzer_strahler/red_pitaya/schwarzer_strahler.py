@@ -4,7 +4,7 @@ import time
 import os
 
 class SchwarzerStrahler:
-    def __init__(this, messanzahl:int = 1000):
+    def __init__(this, messanzahl:int = 10000):
         this.trig = messanzahl;
         this.fpga = overlay();
         this.osc = this.fpga.osc(0, 20.0)
@@ -17,19 +17,15 @@ class SchwarzerStrahler:
 
         this.gpio = this.fpga.gpio
         this.init_pin = this.gpio("n", 0, "out")
-        this.ready_pin = this.gpio("n", 1, "in")
-        this.step_pin = this.gpio("n", 2, "out")
+        this.step_finished = this.gpio("n", 1, "in")
+        this.do_step = this.gpio("n", 2, "out")
         this.endswitch_pin = this.gpio("n", 3, "in")
 
         # init func from script 457
+    def init(this):
         this.init_pin.write(True)
         start = time.time()
-        while this.ready_pin.read() = True:
-            if time.time() - start > 1:
-                print('Jumped, cause: Time')
-                break;
-            pass
-        while this.ready_pin.read() == False:
+        while this.step_finished.read() == False:
             pass
         this.init_pin.write(False)
 
@@ -42,26 +38,17 @@ class SchwarzerStrahler:
         return this.osc.data(this.trig)
 
     def waitForStep(this):
-        this.step_pin.write(True)
+        this.do_step.write(True)
         start = time.time()
-        while this.ready_pin.read() == True:
-            if time.time() - start > 1:
-                print('Jumped, cause: Time')
-                break;
+        while this.step_finished.read() == False:
             pass
-        while this.ready_pin.read() == False:
-            pass
-        this.step_pin.write(False)
+        this.do_step.write(False)
 
-    def run(this, filename:str, steps:int = 100):
+    def run(this, filename:str):
         with open(filename, 'w', encoding='utf-8', buffering=1) as file:
             file.write("Schritt,Messwert,Offset\n")
             
-            for i in range(steps):
-                if this.endswitch_pin.read() != True:
-                    file.write('{},{}\n'.format(i, np.mean(this.measure())))
-                    print(f'{100 * i / steps}%', end='\r')
-                    this.waitForStep()
-                else:
-                    print('Reached End\n')
-                    break;
+            while endswitch_pin.read() == False:
+                file.write('{},{}\n'.format(i, np.mean(this.measure())))
+                this.waitForStep()
+

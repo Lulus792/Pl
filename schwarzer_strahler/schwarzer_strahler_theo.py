@@ -22,9 +22,9 @@ plt.plot(wellenlaenge, intensitat_1)
 plt.plot(wellenlaenge, intensitat_2)
 plt.plot(wellenlaenge, intensitat_3)
 
-plt.xlabel('Wellenlaenge in nm')
+plt.xlabel(r'Wellenlaenge in $10^{-6}$')
 plt.ylabel('Intensitat in 'r'$\frac{\text{J}}{\text{s}}$')
 
 #plt.legend()
-
+plt.savefig('theo_werte.svg')
 plt.show()
