@@ -18,13 +18,13 @@ intensitat_3 = plank_strahlung(wellenlaenge, 850)
 fig, ax = plt.subplots(figsize=(8, 8))
 ax.text(max(wellenlaenge), max(intensitat_3), r'$\omega_{\nu}(\nu, T)=\frac{8\pi h c}{\lambda^5\left(e^{\frac{hc}{\lambda k_B T}}-1\right)}$', ha='right', va='top', fontsize='20')
 
-plt.plot(wellenlaenge, intensitat_1)
-plt.plot(wellenlaenge, intensitat_2)
-plt.plot(wellenlaenge, intensitat_3)
+plt.plot(wellenlaenge, intensitat_1, label=r'$T=750$')
+plt.plot(wellenlaenge, intensitat_2, label=r'$T=800$')
+plt.plot(wellenlaenge, intensitat_3, label=r'$T=850$')
 
 plt.xlabel(r'Wellenlaenge in $10^{-6}$')
 plt.ylabel('Intensitat in 'r'$\frac{\text{J}}{\text{s}}$')
 
-#plt.legend()
+plt.legend(loc='lower right')
 plt.savefig('theo_werte.svg')
 plt.show()
